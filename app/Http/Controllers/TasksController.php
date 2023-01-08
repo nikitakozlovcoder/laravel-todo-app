@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use App\Models\TaskFile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class TasksController extends Controller
 {
@@ -36,7 +38,11 @@ class TasksController extends Controller
      */
     public function store(Request $request)
     {
-        Task::create($request->all());
+        $request->validate(Task::$createValidationRules);
+        $task = new Task();
+        $task->fill($request->all());
+        $this->uploadImages($task, $request);
+        $task->save();
         return redirect()->route('tasks.index');
     }
 
@@ -71,8 +77,10 @@ class TasksController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->validate(Task::$updateValidationRules);
         $task = Task::find($id);
         $task->update($request->all());
+        $this->uploadImages($task, $request);
         $task->save();
         return redirect()->route('tasks.show', ['task' => $id]);
     }
@@ -87,5 +95,13 @@ class TasksController extends Controller
     {
         Task::destroy($id);
         return redirect()->route('tasks.index');
+    }
+
+    private function uploadImages(Task $task, $request){
+        foreach($request->images as $image){
+            $file = new TaskFile();
+            $file->path = $image->store('tasks');
+            $task->files()->save($file);
+        }
     }
 }
