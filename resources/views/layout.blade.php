@@ -7,6 +7,15 @@
     <title>ToDoApp</title>
     @vite(['resources/css/app.css'])
 </head>
+<header>
+    @if (!Route::is('login')) 
+        @auth
+            <a href="{{ route('logout') }}">Logout</a>
+        @else
+            <a href="{{ route('login') }}">Login</a>
+        @endauth      
+    @endif     
+</header>
 <body>
     @yield('content')
 </body>

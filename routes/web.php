@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\TasksController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [TasksController::class, 'index']);
+Route::get('/login', [UsersController::class, 'showLogin'])->name('login');
+Route::post('/login', [UsersController::class, 'login'])->name('login');
+Route::get('/logout', [UsersController::class, 'logout'])->name('logout');
 Route::resource('tasks', TasksController::class);

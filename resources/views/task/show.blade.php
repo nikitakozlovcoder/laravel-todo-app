@@ -6,7 +6,7 @@
     <p>{{$task->description}}</p>
     @foreach ($task->files as $file)
         <div>
-            <img src="{{asset($file->path)}}" alt="#">
+            <img src="{{asset('storage/'.$file->path)}}" alt="#">
         </div>
     @endforeach
    
@@ -16,5 +16,4 @@
         @method('delete')
         <input type="submit" value="Delete"> 
     </form>
-
 @endsection
