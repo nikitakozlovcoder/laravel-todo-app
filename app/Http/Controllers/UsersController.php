@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\User\IUserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller
 {
+    private IUserService $userService;
+    public function __construct(IUserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
     public function showLogin()
     {
         return view('user.login');
@@ -14,12 +21,7 @@ class UsersController extends Controller
 
     public function login(Request $request)
     {
-        if (Auth::attempt($request->only('email', 'password'))) {
-            return redirect()->route('tasks.index');
-        }
-
-        //TODO i18n
-        return back()->withErrors(['credentials'=>'invalid credentials'])->onlyInput('email');
+       return $this->userService->login($request);
     } 
 
     public function logout(Request $request)
