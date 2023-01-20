@@ -6,7 +6,7 @@
     <p>{{$task->description}}</p>
     @foreach ($task->files as $file)
         <div>
-            <img src="{{asset('storage/'.$file->path)}}" alt="#">
+          <img src={{Storage::url($file->path)}} alt="#">
         </div>
     @endforeach
    

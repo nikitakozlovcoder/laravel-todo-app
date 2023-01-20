@@ -43,9 +43,8 @@ class TasksController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(Task::$createValidationRules);
         $task = new Task();
-        $task->fill($request->all());
+        $task->fill($request->validate(Task::$createValidationRules));
         $this->uploadImages($task, $request);
         $task->save();
         return redirect()->route('tasks.index');
@@ -82,9 +81,8 @@ class TasksController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate(Task::$updateValidationRules);
         $task = Task::find($id);
-        $task->update($request->all());
+        $task->update($request->validate(Task::$updateValidationRules));
         $this->uploadImages($task, $request);
         $task->save();
         return redirect()->route('tasks.show', ['task' => $id]);
